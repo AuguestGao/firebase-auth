@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Container } from "react-bootstrap";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-function App() {
+import Signup from "./pages/signup";
+import Login from "./pages/login";
+import Home from "./pages/Home";
+
+import { connect } from "react-redux";
+
+function App({ currentUser }) {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container
+      className="d-flex align-items-center justify-content-center"
+      style={{ minHeight: "100vh" }}
+    >
+      <div className="w-100" style={{ maxWidth: "400px" }}>
+        <Router>
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/signup" component={Signup} />
+            <Route path="/login" component={Login} />
+          </Switch>
+        </Router>
+        {!!currentUser ? <h2>logout {currentUser.email}</h2> : null}
+      </div>
+    </Container>
   );
 }
 
-export default App;
+const mapState = ({ user }) => ({ currentUser: user.currentUser });
+// const mapDispatch = (dispatch) => ({
+//   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+// });
+
+export default connect(mapState, null)(App);
